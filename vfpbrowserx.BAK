@@ -1,0 +1,48 @@
+*You can look at the win32api help form more details
+
+ *You can place this code on a button click event
+
+ * This code was used to start the default browser and to navigate
+ * to the URL placed in var "MonURL"
+
+ *If i place a URL to an 'HTM' or an 'HTML' file windows start the default
+ *browser associate with this extention.
+ *It works like a double-click on a file in explorer
+
+ MonURL="https://virtualfoxfest.com" 
+
+ * or you can place a 'Mail' URL to start the
+ * default Email program (ex. MonURL = "mailto:gersan@total.net")
+
+ DECLARE INTEGER ShellExecute ;
+ IN SHELL32.dll ;
+ INTEGER nWinHandle, ;
+ STRING cOperation, ;
+ STRING cFileName, ;
+ STRING cParameters, ;
+ STRING cDirectory, ;
+ INTEGER nShowWindow 
+
+ **retreive the main VFP window handle (this handle is used by ShellExecute)
+
+ DECLARE INTEGER FindWindow ;
+ IN WIN32API ;
+ STRING cNull, ;
+ STRING cWinName 
+
+ z=ShellExecute(FindWindow( 0, _SCREEN.caption), "Open", MonURL, "", "c:\temp\", 1) 
+
+ **Error messages if the return value is < 32
+
+ IF z < 32
+ DO CASE
+ CASE z=2 
+ Wait wind "Bad association or invalid URL , oops!" 
+ CASE z=31
+ Wait wind "No association , oops!" 
+ CASE z=29 
+ Wait wind "Can't start the application, oops!" 
+ CASE z=30 
+ Wait wind "The application is already started, oops!" 
+ ENDCASE 
+ ENDIF
